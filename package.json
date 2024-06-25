@@ -1,7 +1,7 @@
 {
   "name": "bgsvg",
   "description": "Generate beautiful random SVG backgrounds.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -10,9 +10,15 @@
     "preview": "tsx watch preview/server.ts",
     "build": "tsup-node"
   },
-  "keywords": [],
   "author": "Uday Hiwarale <thatisuday@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thatisuday/bgsvg/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thatisuday/bgsvg.git"
+  },
   "devDependencies": {
     "@types/chroma-js": "2.4.4",
     "@types/express": "4.17.21",
