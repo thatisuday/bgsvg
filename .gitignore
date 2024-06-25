@@ -1,0 +1,15 @@
+# Ignore dependecines
+node_modules/
+
+# Ignore the build directory
+dist/
+
+# Ignore test files
+test/
+*.spec.ts
+*.test.ts
+
+# Ignore any other files that should not be published
+.git/
+.DS_Store
+
