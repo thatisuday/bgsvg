@@ -23,7 +23,6 @@ export const getCanvas = ({
     height: number;
     background: CanvasBackground;
 }): SVGSVGElement => {
-    console.log("background", background);
     const { document } = new Window();
 
     const svg = document.createElementNS(SVG_NS, "svg");
