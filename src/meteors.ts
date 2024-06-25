@@ -1,12 +1,12 @@
 import { Window, type SVGSVGElement } from "happy-dom";
-import { getCanvas } from "./lib/canvas";
+import { CanvasBackground, getCanvas } from "./lib/canvas";
 import { SVG_NS } from "./lib/const";
 import { randomNumber, randomNumbers, randomElement } from "./lib/random";
 import chroma from "chroma-js";
 import { createSvgGradient } from "./lib/svg";
 
 /**
- * Add meteors to the SVG.
+ * Add a meteor to the SVG.
  */
 const addMeteor = ({
     svg,
@@ -54,26 +54,27 @@ const addMeteor = ({
 export const meteors = ({
     width,
     height,
-    backgroundColor,
     color,
-    min = 20,
-    max = 25,
-    thickness = 5,
-    bidirectional,
+    background,
+    min = 35,
+    max = 40,
+    thickness = 4,
+    bidirectional = true,
 }: {
     width: number;
     height: number;
-    backgroundColor: string;
     color: string;
+    background: CanvasBackground;
     min?: number;
     max?: number;
     thickness?: number;
     bidirectional?: boolean;
 }): string => {
-    const svg = getCanvas({ width, height, backgroundColor });
+    const svg = getCanvas({ width, height, background });
     const count = Math.floor(randomNumber(min, max));
 
-    const values = randomNumbers({
+    // get <count> random X-Axis values
+    const xs = randomNumbers({
         min: 0,
         max: width,
         count,
@@ -98,10 +99,10 @@ export const meteors = ({
         svg.appendChild(gradientRev);
     }
 
-    for (const value of values) {
-        const x1 = value;
-        const y1 = randomNumber(-height / 5, height + height / 5);
-        const length = randomNumber(height / 3, (2 * height) / 3);
+    for (const x of xs) {
+        const x1 = Math.round(x);
+        const y1 = Math.round(randomNumber(-height / 5, height + height / 5));
+        const length = Math.round(randomNumber(height / 3, (2 * height) / 3));
         const x2 = x1 + length;
         const y2 = y1 + length;
 
@@ -111,7 +112,7 @@ export const meteors = ({
             svg,
             start: [x1, y1],
             end: [x2, y2],
-            thickness: randomNumber(thickness, thickness + (Math.random() - 0.25) * thickness),
+            thickness: Math.round(randomNumber(thickness, thickness + (Math.random() - 0.25) * thickness)),
             gradientId: meteorGradientId,
         });
     }

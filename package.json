@@ -1,7 +1,7 @@
 {
   "name": "bgsvg",
   "description": "Generate beautiful random SVG backgrounds.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",

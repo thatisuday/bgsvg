@@ -4,7 +4,6 @@ node_modules/
 # Ignore the source directories
 src/
 preview/
-assets/
 
 # Ignore test files
 test/

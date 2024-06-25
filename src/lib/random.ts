@@ -1,13 +1,19 @@
 /**
+ * Calculate variance of a value.
+ */
+export const getVariance = (value: number, factor: number = 2): number => {
+    return (Math.random() - 0.5) * (value / factor);
+};
+
+/**
  * Generate <count> numbers between <min> and <max> with approximate even distribution.
  */
 export const randomNumbers = ({ min, max, count }: { min: number; max: number; count: number }) => {
     const step = (max - min) / count;
 
     return Array.from({ length: count }, (_, index) => {
-        const variance = (Math.random() - 0.5) * (step / 2);
-        const value = min + index * step + variance;
-        return Math.max(min, Math.min(value, max));
+        const variance = getVariance(step);
+        return index * step + variance;
     });
 };
 
