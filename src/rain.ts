@@ -53,16 +53,16 @@ const addDrop = ({
 export const rain = ({
     width,
     height,
-    color,
     background,
+    color,
     dropsX = 20,
     dropsY = 15,
     thickness = 1,
 }: {
     width: number;
     height: number;
-    color: string;
     background: CanvasBackground;
+    color: string;
     dropsX?: number;
     dropsY?: number;
     thickness?: number;
@@ -90,7 +90,6 @@ export const rain = ({
         const length = Math.round(randomNumber(height / dropsY / 2, (2 * height) / dropsY / 3));
         const x2 = x1 + length;
         const y2 = y1 + length;
-
         const gradientId = `gradient_${randomNumber(1, 10000000)}`;
 
         const gradient = createSvgGradient({
@@ -99,7 +98,12 @@ export const rain = ({
             endColor: chroma(color).alpha(randomNumber(0.25, 1)).css(),
         });
 
-        svg.appendChild(gradient);
+        const defs = svg.getElementsByTagName("defs")?.[0];
+        if (!defs) {
+            defs.appendChild(gradient);
+        } else {
+            svg.appendChild(gradient);
+        }
 
         addDrop({
             svg,

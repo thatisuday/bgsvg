@@ -60,7 +60,9 @@ export const getCanvas = ({
         linearGradient.appendChild(stop1);
         linearGradient.appendChild(stop2);
 
-        svg.appendChild(linearGradient);
+        const defs = document.createElementNS(SVG_NS, "defs");
+        defs.appendChild(linearGradient);
+        svg.appendChild(defs);
 
         backgroundRect.setAttribute("fill", "url(#backgroundGradient)");
     }

@@ -1,14 +1,16 @@
 {
   "name": "bgsvg",
   "description": "Generate beautiful random SVG backgrounds.",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "verify": "tsc --noEmit",
     "preview": "tsx watch preview/server.ts",
-    "build": "tsup-node"
+    "build": "tsup-node",
+    "lint": "eslint src"
   },
   "author": "Uday Hiwarale <thatisuday@gmail.com>",
   "license": "MIT",
@@ -25,7 +27,7 @@
     "@typescript-eslint/eslint-plugin": "7.14.1",
     "@typescript-eslint/parser": "7.14.1",
     "chroma-js": "2.4.2",
-    "eslint": "9.5.0",
+    "eslint": "8.57.0",
     "express": "4.19.2",
     "handlebars": "4.7.8",
     "happy-dom": "14.12.3",
@@ -36,5 +38,10 @@
   "peerDependencies": {
     "chroma-js": "2.4.2",
     "happy-dom": "14.12.3"
+  },
+  "resolutions": {
+    "strip-ansi": "6.0.1",
+    "string-width": "4.2.2",
+    "wrap-ansi": "7.0.0"
   }
 }

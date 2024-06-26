@@ -54,8 +54,8 @@ const addMeteor = ({
 export const meteors = ({
     width,
     height,
-    color,
     background,
+    color,
     min = 35,
     max = 40,
     thickness = 4,
@@ -63,14 +63,15 @@ export const meteors = ({
 }: {
     width: number;
     height: number;
-    color: string;
     background: CanvasBackground;
+    color: string;
     min?: number;
     max?: number;
     thickness?: number;
     bidirectional?: boolean;
 }): string => {
     const svg = getCanvas({ width, height, background });
+    const defs = svg.getElementsByTagName("defs")?.[0];
     const count = Math.floor(randomNumber(min, max));
 
     // get <count> random X-Axis values
@@ -86,7 +87,11 @@ export const meteors = ({
         endColor: chroma(color).alpha(1).css(),
     });
 
-    svg.appendChild(gradient);
+    if (!defs) {
+        svg.appendChild(gradient);
+    } else {
+        defs.appendChild(gradient);
+    }
 
     // add reverse gradient
     if (bidirectional) {
@@ -96,7 +101,11 @@ export const meteors = ({
             endColor: chroma(color).alpha(0).css(),
         });
 
-        svg.appendChild(gradientRev);
+        if (!defs) {
+            svg.appendChild(gradientRev);
+        } else {
+            defs.appendChild(gradientRev);
+        }
     }
 
     for (const x of xs) {

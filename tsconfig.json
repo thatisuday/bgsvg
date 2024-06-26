@@ -4,7 +4,9 @@
     "module": "ES6",
     "moduleResolution": "Node10",
     "noEmit": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
   },
-  "include": ["src", "preview"]
+  "include": ["src", "preview"],
+  "exclude": ["node_modules"]
 }
