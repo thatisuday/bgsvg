@@ -10,8 +10,7 @@
     "verify": "tsc --noEmit",
     "preview": "tsx watch preview/server.ts",
     "build": "tsup-node",
-    "lint": "eslint src",
-    "publish": "yarn build && npm publish"
+    "lint": "eslint src"
   },
   "author": "Uday Hiwarale <thatisuday@gmail.com>",
   "license": "MIT",
