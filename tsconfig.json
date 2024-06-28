@@ -5,8 +5,9 @@
     "moduleResolution": "Node10",
     "noEmit": true,
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["src", "preview"],
+  "include": ["src", "preview", "tests"],
   "exclude": ["node_modules"]
 }

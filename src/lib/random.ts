@@ -1,8 +1,41 @@
 /**
  * Calculate variance of a value.
  */
-export const getVariance = (value: number, factor: number = 2): number => {
-    return (Math.random() - 0.5) * (value / factor);
+export const getVariance = (value: number, factor: number = 4): number => {
+    return (Math.random() - 0.5) * 2 * (value / factor);
+};
+
+/**
+ * Get random nearly equally distributed random points in 2D plane.
+ */
+export const get2dPoints = ({
+    width,
+    height,
+    densityX,
+    densityY,
+    varianceFactor,
+}: {
+    width: number;
+    height: number;
+    densityX: number;
+    densityY: number;
+    varianceFactor: number;
+}): [number, number][] => {
+    const stepX = width / densityX;
+    const stepY = height / densityY;
+
+    const points: [number, number][] = [];
+
+    for (let i = 0; i < densityX + 1; i++) {
+        for (let j = 0; j < densityY + 1; j++) {
+            const x = i * stepX + getVariance(stepX, varianceFactor);
+            const y = j * stepY + getVariance(stepY, varianceFactor);
+
+            points.push([Math.round(x), Math.round(y)]);
+        }
+    }
+
+    return points;
 };
 
 /**

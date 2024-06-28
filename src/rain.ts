@@ -1,9 +1,11 @@
 import { Window, type SVGSVGElement } from "happy-dom";
 import { CanvasBackground, getCanvas } from "./lib/canvas";
 import { SVG_NS } from "./lib/const";
-import { randomNumber, getVariance } from "./lib/random";
+import { randomNumber, get2dPoints } from "./lib/random";
 import chroma from "chroma-js";
 import { createSvgGradient } from "./lib/svg";
+import type { OutputType, OutputTypeSvg } from "./lib/types";
+import { getOutput } from "./lib/output";
 
 /**
  * Add a rain drop to the SVG.
@@ -38,27 +40,7 @@ const addDrop = ({
     svg.appendChild(meteor);
 };
 
-/**
- * Generate an SVG with rain.
- *
- * ## Arguments:
- * @param width - width of the SVG
- * @param height - height of the SVG
- * @param backgroundColor - background color of the SVG
- * @param color - color of the rain
- * @param min - min number of rain
- * @param max - max number of rain
- * @param thickness - thickness of the meteor
- */
-export const rain = ({
-    width,
-    height,
-    background,
-    color,
-    dropsX = 20,
-    dropsY = 15,
-    thickness = 1,
-}: {
+export async function rain(options: {
     width: number;
     height: number;
     background: CanvasBackground;
@@ -66,28 +48,62 @@ export const rain = ({
     dropsX?: number;
     dropsY?: number;
     thickness?: number;
-}): string => {
+    output?: OutputTypeSvg;
+}): Promise<string>;
+
+export async function rain(options: {
+    width: number;
+    height: number;
+    background: CanvasBackground;
+    color: string;
+    dropsX?: number;
+    dropsY?: number;
+    thickness?: number;
+    output: Exclude<OutputType, OutputTypeSvg>;
+}): Promise<Buffer>;
+
+/**
+ * Generate an SVG with rain.
+ */
+export async function rain({
+    width,
+    height,
+    background,
+    color,
+    densityX = 20,
+    densityY = 15,
+    thickness = 1,
+    randomness = 4,
+    output = {
+        type: "svg",
+    },
+}: {
+    width: number;
+    height: number;
+    background: CanvasBackground;
+    color: string;
+    densityX?: number;
+    densityY?: number;
+    thickness?: number;
+    randomness?: number;
+    output?: OutputType;
+}): Promise<string | Buffer> {
+    const { document } = new Window();
     const svg = getCanvas({ width, height, background });
 
-    const stepX = width / dropsX;
-    const stepY = height / dropsY;
-
     // generate coordinate points for drops
-    const points: [number, number][] = [];
-
-    for (let i = 0; i < dropsX + 1; i++) {
-        for (let j = 0; j < dropsY; j++) {
-            const x = i * stepX + getVariance(stepX);
-            const y = j * stepY + getVariance(stepY);
-
-            points.push([Math.round(x), Math.round(y)]);
-        }
-    }
+    const points = get2dPoints({
+        width,
+        height,
+        densityX,
+        densityY,
+        varianceFactor: randomness,
+    });
 
     for (const [x, y] of points) {
         const x1 = x;
         const y1 = y;
-        const length = Math.round(randomNumber(height / dropsY / 2, (2 * height) / dropsY / 3));
+        const length = Math.round(randomNumber(height / densityY / 2, (2 * height) / densityY / 3));
         const x2 = x1 + length;
         const y2 = y1 + length;
         const gradientId = `gradient_${randomNumber(1, 10000000)}`;
@@ -100,9 +116,11 @@ export const rain = ({
 
         const defs = svg.getElementsByTagName("defs")?.[0];
         if (!defs) {
+            const defs = document.createElementNS(SVG_NS, "defs");
             defs.appendChild(gradient);
+            svg.appendChild(defs);
         } else {
-            svg.appendChild(gradient);
+            defs.appendChild(gradient);
         }
 
         addDrop({
@@ -114,5 +132,10 @@ export const rain = ({
         });
     }
 
-    return svg.outerHTML;
-};
+    return getOutput({
+        width,
+        height,
+        svg,
+        output,
+    });
+}

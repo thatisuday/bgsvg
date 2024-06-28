@@ -4,16 +4,18 @@ node_modules/
 # Ignore the source directories
 src/
 preview/
-
-# Ignore test files
-test/
-*.spec.ts
-*.test.ts
+tests/
 
 # Ignore any other files that should not be published
 .git/
 .DS_Store
 
 # Ignore configuration files
+.editorconfig
+.eslintignore
+.eslintrc
+.prettierignore
+.prettierrc
+jest.config.json
 tsconfig.json
 tsup.config.ts

@@ -10,14 +10,6 @@ npm i -S bgsvg
 yarn add bgsvg
 ```
 
-### Install peer dependencies
-
-```bash
-npm i -S chroma-js@2.4.2 happy-dom@14.12.3
-# or
-yarn add chroma-js@2.4.2 happy-dom@14.12.3
-```
-
 ## Supported SVG backgrounds
 
 ## Meteors
@@ -25,15 +17,18 @@ yarn add chroma-js@2.4.2 happy-dom@14.12.3
 ```ts
 import { meteors } from "bgsvg";
 
-const svg = meteors({
+const svg = await meteors({
   width: 800,
   height: 300,
   background: "#222299",
   color: "#952E9D",
-  min: 35,
-  max: 40,
+  densityX: 30,
+  densityY: 2,
   thickness: 4,
   bidirectional: true,
+  output: {
+    type: "svg",
+  },
 });
 
 console.log(svg);
@@ -42,20 +37,21 @@ console.log(svg);
 
 <img src="./assets/meteors.svg" style="max-width: 100%">
 
-| Option        | Default value | Description                     |
-| ------------- | ------------- | ------------------------------- |
-| width         | -             | Width of the SVG                |
-| height        | -             | Height of the SVG               |
-| background    | -             | Background of the SVG           |
-| color         | -             | Color of the meteors            |
-| min           | 35            | Minimum number of meteors       |
-| max           | 40            | Maximum number of meteors       |
-| thickness     | 4             | Thickness of meteors            |
-| bidirectional | true          | Show meteors falling and rising |
+| Option        | Default value | Description                          |
+| ------------- | ------------- | ------------------------------------ |
+| width         | -             | Width of the SVG                     |
+| height        | -             | Height of the SVG                    |
+| background    | -             | Background of the SVG                |
+| color         | -             | Color of the meteors                 |
+| densityX      | 30            | Average density of meteors on X-Axis |
+| densityY      | 2             | Average density of meteors on Y-Axis |
+| thickness     | 4             | Thickness of meteors                 |
+| bidirectional | true          | Show meteors falling and rising      |
+| output        | {type: 'svg'} | Output format                        |
 
 SVGs can have a solid color or a gradient background depending on the value of the `background` option.
 
-```typescript
+```ts
 export type CanvasBackground =
   | string
   | {
@@ -67,21 +63,31 @@ export type CanvasBackground =
     };
 ```
 
+You can generate SVG, PNG, JPEG, and Webp image based on the `output` option. When the output format is not SVG, then an image `Buffer` is returned.
+
+```ts
+type OutputTypeSvg = { type: "svg" };
+type OutputTypePng = { type: "png" };
+type OutputTypeWebp = { type: "webp" };
+type OutputTypeJpeg = { type: "jpeg"; quality?: number };
+```
+
 ## rain
 
 ```ts
 import { rain } from "bgsvg";
 
-const svg = rain({
+const svg = await rain({
   width: 800,
   height: 300,
   background: {
     colors: ["#081e46", "#181f74"],
   },
   color: "#952E9D",
-  dropsX: 20,
-  dropsY: 15,
+  densityX: 20,
+  densityY: 15,
   thickness: 1,
+  randomness: 4,
 });
 
 console.log(svg);
@@ -90,15 +96,17 @@ console.log(svg);
 
 <img src="./assets/rain.svg" style="max-width: 100%">
 
-| Option     | Default value | Description                                |
-| ---------- | ------------- | ------------------------------------------ |
-| width      | -             | Width of the SVG                           |
-| height     | -             | Height of the SVG                          |
-| background | -             | Background of the SVG                      |
-| color      | -             | Color of the rain drops                    |
-| dropsX     | 20            | Number of drops on the X-Axis (horizontal) |
-| dropsY     | 15            | Number of drops on the Y-Axis (vertical)   |
-| thickness  | 1             | Thickness of the drop                      |
+| Option     | Default value | Description                                    |
+| ---------- | ------------- | ---------------------------------------------- |
+| width      | -             | Width of the SVG                               |
+| height     | -             | Height of the SVG                              |
+| background | -             | Background of the SVG                          |
+| color      | -             | Color of the rain drops                        |
+| densityX   | 20            | Average density of drops on X-Axis             |
+| densityY   | 15            | Average density of drops on Y-Axis             |
+| thickness  | 1             | Thickness of the drop                          |
+| randomness | 4             | Randomness of the drops (more value, the less) |
+| output     | {type: 'svg'} | Output format                                  |
 
 # Development
 
@@ -115,3 +123,9 @@ yarn preview
 ```
 
 This commands starts an express server at `http://localhost:3003` to display how the SVGs would look like.
+
+## Test
+
+```bash
+yarn test
+```

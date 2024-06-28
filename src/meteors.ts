@@ -1,9 +1,11 @@
 import { Window, type SVGSVGElement } from "happy-dom";
 import { CanvasBackground, getCanvas } from "./lib/canvas";
 import { SVG_NS } from "./lib/const";
-import { randomNumber, randomNumbers, randomElement } from "./lib/random";
+import { randomNumber, randomElement, get2dPoints } from "./lib/random";
 import chroma from "chroma-js";
 import { createSvgGradient } from "./lib/svg";
+import type { OutputType, OutputTypeSvg } from "./lib/types";
+import { getOutput } from "./lib/output";
 
 /**
  * Add a meteor to the SVG.
@@ -38,29 +40,7 @@ const addMeteor = ({
     svg.appendChild(meteor);
 };
 
-/**
- * Generate an SVG with meteors.
- *
- * ## Arguments:
- * @param width - width of the SVG
- * @param height - height of the SVG
- * @param backgroundColor - background color of the SVG
- * @param color - color of the meteors
- * @param min - min number of meteors
- * @param max - max number of meteors
- * @param thickness - thickness of the meteor
- * @param bidirectional - should meteors reverse direction
- */
-export const meteors = ({
-    width,
-    height,
-    background,
-    color,
-    min = 35,
-    max = 40,
-    thickness = 4,
-    bidirectional = true,
-}: {
+export async function meteors(options: {
     width: number;
     height: number;
     background: CanvasBackground;
@@ -69,17 +49,50 @@ export const meteors = ({
     max?: number;
     thickness?: number;
     bidirectional?: boolean;
-}): string => {
+    output?: OutputTypeSvg;
+}): Promise<string>;
+
+export async function meteors(options: {
+    width: number;
+    height: number;
+    background: CanvasBackground;
+    color: string;
+    min?: number;
+    max?: number;
+    thickness?: number;
+    bidirectional?: boolean;
+    output: Exclude<OutputType, OutputTypeSvg>;
+}): Promise<Buffer>;
+
+/**
+ * Generate an SVG with meteors.
+ */
+export async function meteors({
+    width,
+    height,
+    background,
+    color,
+    densityX = 20,
+    densityY = 1,
+    thickness = 4,
+    bidirectional = true,
+    output = {
+        type: "svg",
+    },
+}: {
+    width: number;
+    height: number;
+    background: CanvasBackground;
+    color: string;
+    densityX?: number;
+    densityY?: number;
+    thickness?: number;
+    bidirectional?: boolean;
+    output?: OutputType;
+}): Promise<string | Buffer> {
+    const { document } = new Window();
     const svg = getCanvas({ width, height, background });
     const defs = svg.getElementsByTagName("defs")?.[0];
-    const count = Math.floor(randomNumber(min, max));
-
-    // get <count> random X-Axis values
-    const xs = randomNumbers({
-        min: 0,
-        max: width,
-        count,
-    });
 
     const gradient = createSvgGradient({
         id: "gradient",
@@ -88,7 +101,9 @@ export const meteors = ({
     });
 
     if (!defs) {
-        svg.appendChild(gradient);
+        const defs = document.createElementNS(SVG_NS, "defs");
+        defs.appendChild(gradient);
+        svg.appendChild(defs);
     } else {
         defs.appendChild(gradient);
     }
@@ -102,16 +117,27 @@ export const meteors = ({
         });
 
         if (!defs) {
-            svg.appendChild(gradientRev);
+            const defs = document.createElementNS(SVG_NS, "defs");
+            defs.appendChild(gradientRev);
+            svg.appendChild(defs);
         } else {
             defs.appendChild(gradientRev);
         }
     }
 
-    for (const x of xs) {
-        const x1 = Math.round(x);
-        const y1 = Math.round(randomNumber(-height / 5, height + height / 5));
-        const length = Math.round(randomNumber(height / 3, (2 * height) / 3));
+    // generate coordinate points for drops
+    const points = get2dPoints({
+        width,
+        height,
+        densityX,
+        densityY,
+        varianceFactor: 4,
+    });
+
+    for (const [x, y] of points) {
+        const x1 = x;
+        const y1 = y;
+        const length = Math.round(randomNumber(height / densityY / 2, (2 * height) / densityY / 3));
         const x2 = x1 + length;
         const y2 = y1 + length;
 
@@ -126,5 +152,10 @@ export const meteors = ({
         });
     }
 
-    return svg.outerHTML;
-};
+    return getOutput({
+        width,
+        height,
+        svg,
+        output,
+    });
+}

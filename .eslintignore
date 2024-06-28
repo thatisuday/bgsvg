@@ -16,6 +16,7 @@
 .prettierrc
 .prettierignore
 tsup.config.ts
+jest.config.js
 
 dist/
 assets/
