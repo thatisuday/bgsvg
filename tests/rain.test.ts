@@ -1,3 +1,4 @@
+import { Window } from "happy-dom";
 import { rain } from "../src/rain";
 
 describe("rain", () => {
@@ -9,6 +10,16 @@ describe("rain", () => {
             color: "#fff",
         });
 
-        expect(svg).toMatch("svg");
+        const { document } = new Window();
+        document.body.innerHTML = svg;
+        const svgElement = document.querySelector("svg");
+
+        expect(svgElement).not.toBeNull();
+        expect(svgElement.getAttribute("width")).toBe("500");
+        expect(svgElement.getAttribute("height")).toBe("200");
+
+        const svgRectElement = svgElement.querySelector("rect");
+        expect(svgRectElement).not.toBeNull();
+        expect(svgRectElement.getAttribute("fill")).toBe("#000");
     });
 });

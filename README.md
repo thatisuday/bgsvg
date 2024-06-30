@@ -2,6 +2,8 @@
 
 Generate beautiful random SVG backgrounds on Node.js runtime.
 
+![CI](https://github.com/thatisuday/bgsvg/actions/workflows/ci.yml/badge.svg) ![NPM Version](https://img.shields.io/npm/v/bgsvg) ![NPM Downloads](https://img.shields.io/npm/dw/bgsvg)
+
 ## Installation
 
 ```bash
@@ -20,8 +22,10 @@ import { meteors } from "bgsvg";
 const svg = await meteors({
   width: 800,
   height: 300,
-  background: "#222299",
-  color: "#952E9D",
+  background: {
+    colors: ["#000000", "#13137f"],
+  },
+  color: "#ba8003",
   densityX: 30,
   densityY: 2,
   thickness: 4,
@@ -81,9 +85,9 @@ const svg = await rain({
   width: 800,
   height: 300,
   background: {
-    colors: ["#081e46", "#181f74"],
+    colors: ["#27274c", "#121242"],
   },
-  color: "#952E9D",
+  color: "#8f97c1",
   densityX: 20,
   densityY: 15,
   thickness: 1,

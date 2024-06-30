@@ -28,10 +28,10 @@ app.get("/meteors", async (req, res) => {
         const image = await meteors({
             width: 800,
             height: 300,
-            color: "#952E9D",
             background: {
                 colors: ["#222299", "#13137f"],
             },
+            color: "#952E9D",
             output: {
                 type: "jpeg",
                 quality: req.query.quality ? parseInt(req.query.quality as string) : undefined,
@@ -44,10 +44,10 @@ app.get("/meteors", async (req, res) => {
         const svg = await meteors({
             width: 800,
             height: 300,
-            color: "#952E9D",
             background: {
-                colors: ["#222299", "#13137f"],
+                colors: ["#000000", "#13137f"],
             },
+            color: "#ba8003",
         });
 
         res.setHeader("Content-Type", "text/html");
@@ -85,7 +85,7 @@ app.get("/rain", async (req, res) => {
             width: 800,
             height: 300,
             background: {
-                colors: ["#081e46", "#181f74"],
+                colors: ["#27274c", "#121242"],
             },
             color: "#8f97c1",
         });
