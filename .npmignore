@@ -5,10 +5,12 @@ node_modules/
 src/
 preview/
 tests/
+assets/
 
 # Ignore any other files that should not be published
 .git/
 .DS_Store
+.github
 
 # Ignore configuration files
 .editorconfig
