@@ -18,6 +18,6 @@ assets/
 .eslintrc
 .prettierignore
 .prettierrc
-jest.config.json
+jest.config.js
 tsconfig.json
 tsup.config.ts
