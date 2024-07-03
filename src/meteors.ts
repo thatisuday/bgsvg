@@ -6,6 +6,7 @@ import chroma from "chroma-js";
 import { createSvgGradient } from "./lib/svg";
 import type { OutputType, OutputTypeSvg } from "./lib/types";
 import { getOutput } from "./lib/output";
+import { logger } from "./lib/logger";
 
 /**
  * Add a meteor to the SVG.
@@ -45,8 +46,8 @@ export async function meteors(options: {
     height: number;
     background: CanvasBackground;
     color: string;
-    min?: number;
-    max?: number;
+    densityX?: number;
+    densityY?: number;
     thickness?: number;
     bidirectional?: boolean;
     output?: OutputTypeSvg;
@@ -57,8 +58,8 @@ export async function meteors(options: {
     height: number;
     background: CanvasBackground;
     color: string;
-    min?: number;
-    max?: number;
+    densityX?: number;
+    densityY?: number;
     thickness?: number;
     bidirectional?: boolean;
     output: Exclude<OutputType, OutputTypeSvg>;
@@ -90,6 +91,9 @@ export async function meteors({
     bidirectional?: boolean;
     output?: OutputType;
 }): Promise<string | Buffer> {
+    // prettier-ignore
+    logger.trace(`[METEORS] screenshot(${JSON.stringify({ width, height, background, color, densityX, densityY, thickness, bidirectional, output })})`);
+
     const { document } = new Window();
     const svg = getCanvas({ width, height, background });
     const defs = svg.getElementsByTagName("defs")?.[0];

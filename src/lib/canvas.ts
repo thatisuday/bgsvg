@@ -1,5 +1,6 @@
 import { Window, type SVGSVGElement } from "happy-dom";
 import { SVG_NS } from "./const";
+import { logger } from "./logger";
 
 export type CanvasBackground =
     | string
@@ -23,6 +24,9 @@ export const getCanvas = ({
     height: number;
     background: CanvasBackground;
 }): SVGSVGElement => {
+    // prettier-ignore
+    logger.trace(`[CANVAS] getCanvas(${JSON.stringify({ width, height, background })})`);
+
     const { document } = new Window();
 
     const svg = document.createElementNS(SVG_NS, "svg");

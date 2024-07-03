@@ -6,6 +6,7 @@ import chroma from "chroma-js";
 import { createSvgGradient } from "./lib/svg";
 import type { OutputType, OutputTypeSvg } from "./lib/types";
 import { getOutput } from "./lib/output";
+import { logger } from "./lib/logger";
 
 /**
  * Add a rain drop to the SVG.
@@ -88,6 +89,9 @@ export async function rain({
     randomness?: number;
     output?: OutputType;
 }): Promise<string | Buffer> {
+    // prettier-ignore
+    logger.trace( `[RAIN] screenshot(${JSON.stringify({ width, height, background, color, densityX, densityY, thickness, randomness, output })})`);
+
     const { document } = new Window();
     const svg = getCanvas({ width, height, background });
 

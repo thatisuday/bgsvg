@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer";
 import { OutputType } from "./types";
+import { logger } from "./logger";
 
 export const screenshot = async ({
     svg,
@@ -12,6 +13,9 @@ export const screenshot = async ({
     height: number;
     output: Exclude<OutputType, { type: "svg" }>;
 }): Promise<Buffer> => {
+    // prettier-ignore
+    logger.trace( `[SCREENSHOT] screenshot(${JSON.stringify({ width, height, output })})`);
+
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
@@ -28,7 +32,7 @@ export const screenshot = async ({
 
     const buffer = await page.screenshot({
         type: output.type,
-        quality: output.type === "jpeg" ? output.quality : 100,
+        quality: output.type === "jpeg" ? output.quality ?? 100 : undefined,
     });
 
     await browser.close();

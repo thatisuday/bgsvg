@@ -6,7 +6,8 @@
     "noEmit": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["vitest/globals"]
   },
   "include": ["src", "preview", "tests"],
   "exclude": ["node_modules"]
