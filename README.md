@@ -2,7 +2,7 @@
 
 Generate beautiful random SVG backgrounds on Node.js runtime.
 
-![CI](https://github.com/thatisuday/bgsvg/actions/workflows/ci.yml/badge.svg) ![NPM Version](https://img.shields.io/npm/v/bgsvg) ![NPM Downloads](https://img.shields.io/npm/dw/bgsvg)
+[![CI](https://github.com/thatisuday/bgsvg/actions/workflows/ci.yml/badge.svg)](https://github.com/thatisuday/bgsvg/actions/workflows/ci.yml) [![NPM Version](https://img.shields.io/npm/v/bgsvg)](https://www.npmjs.com/package/bgsvg) [![NPM Downloads](https://img.shields.io/npm/dw/bgsvg)](https://www.npmjs.com/package/bgsvg)
 
 ## Installation
 
@@ -111,6 +111,8 @@ console.log(svg);
 | thickness  | 1             | Thickness of the drop                          |
 | randomness | 4             | Randomness of the drops (more value, the less) |
 | output     | {type: 'svg'} | Output format                                  |
+
+---
 
 # Development
 
